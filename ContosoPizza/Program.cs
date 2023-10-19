@@ -2,14 +2,21 @@ using ContosoPizza.Data;
 using ContosoPizza.Services;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using ContosoPizza.Areas.Identity.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration
+    .GetConnectionString("ContosoPizzaContextConnection") ?? throw new InvalidOperationException("Connection string 'ContosoPizzaContextConnection' not found.");
+builder.Services.AddDbContext<ContosoPizzaContext>(options => options.UseSqlite(connectionString));
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<PizzaService>();
 builder.Services.AddDbContext<PizzaContext>(options =>
     options.UseSqlite("Data Source=ContosoPizza.db"));
+
+builder.Services.AddDefaultIdentity<ContosoPizzaUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ContosoPizzaContext>();
 
 WebApplication app = builder.Build();
 
@@ -27,6 +34,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapRazorPages();
 
