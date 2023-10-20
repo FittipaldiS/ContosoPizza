@@ -18,12 +18,15 @@ builder.Services.AddScoped<PizzaService>();
 builder.Services.AddDbContext<PizzaContext>(options =>
     options.UseSqlite("Data Source=ContosoPizza.db"));
 
+//Auth for admin
 builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("Admin");
-});
+    options.AddPolicy("Admin", policy =>
+        policy.RequireAuthenticatedUser()
+            .RequireClaim("IsAdmin", bool.TrueString)));
 
-//builder.Services.AddDefaultIdentity<ContosoPizzaUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ContosoPizzaContext>();
+//Make admin page
+builder.Services.AddRazorPages(options =>
+    options.Conventions.AuthorizePage("/AdminsOnly", "Admin"));
 
 WebApplication app = builder.Build();
 

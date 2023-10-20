@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ContosoPizza.Pages
 {
-    //[Authorize(Policy = "Admin")]
+    [Authorize(Policy = "Admin")]
     public class AdminsOnlyModel : PageModel
     {
         private readonly ILogger<AdminsOnlyModel> _logger;

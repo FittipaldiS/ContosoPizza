@@ -1,12 +1,16 @@
 using ContosoPizza.Models;
 using ContosoPizza.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ContosoPizza.Pages
 {
+    [Authorize]
     public class PizzaListModel : PageModel
     {
+        public bool IsAdmin => HttpContext.User.HasClaim("IsAdmin", bool.TrueString);
+
         private readonly PizzaService _service;
         public IList<Pizza> PizzaList { get; set; } = default!;
 
@@ -25,6 +29,7 @@ namespace ContosoPizza.Pages
 
         public IActionResult OnPost()
         {
+            if (!IsAdmin) return Forbid();
             if (!ModelState.IsValid || NewPizza == null)
             {
                 return Page();
@@ -37,6 +42,7 @@ namespace ContosoPizza.Pages
 
         public IActionResult OnPostDelete(int id)
         {
+            if (!IsAdmin) return Forbid();
             _service.DeletePizza(id);
 
             return RedirectToAction("Get");
