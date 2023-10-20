@@ -25,8 +25,8 @@ builder.Services.AddAuthorization(options =>
             .RequireClaim("IsAdmin", bool.TrueString)));
 
 //Make admin page
-builder.Services.AddRazorPages(options =>
-    options.Conventions.AuthorizePage("/AdminsOnly", "Admin"));
+//builder.Services.AddRazorPages(options =>
+//    options.Conventions.AuthorizePage("/AdminsOnly", "Admin"));
 
 WebApplication app = builder.Build();
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ContosoPizza.Pages
 {
-    [Authorize]
+    //[Authorize]
     public class PizzaListModel : PageModel
     {
         public bool IsAdmin => HttpContext.User.HasClaim("IsAdmin", bool.TrueString);
