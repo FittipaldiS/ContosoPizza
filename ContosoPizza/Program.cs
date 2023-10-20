@@ -2,6 +2,7 @@ using ContosoPizza.Data;
 using ContosoPizza.Services;
 using Microsoft.EntityFrameworkCore;
 using ContosoPizza.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration
@@ -12,9 +13,15 @@ builder.Services.AddDefaultIdentity<ContosoPizzaUser>(options => options.SignIn.
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<PizzaService>();
 builder.Services.AddDbContext<PizzaContext>(options =>
     options.UseSqlite("Data Source=ContosoPizza.db"));
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin");
+});
 
 //builder.Services.AddDefaultIdentity<ContosoPizzaUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ContosoPizzaContext>();
 
